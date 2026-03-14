@@ -25,6 +25,9 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 sourceSets {
@@ -76,7 +79,7 @@ publishing {
             from(components["java"])
             groupId = "io.github.jpalmerr"
             artifactId = "valid4j"
-            version = "0.1.0"
+            version = "1.0.0"
         }
     }
 }
