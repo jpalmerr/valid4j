@@ -35,18 +35,18 @@ valid4j gives you a `Validated<E, A>` type where:
 
 ## Quick Start
 
-```kotlin
-// build.gradle.kts
-implementation("io.github.jpalmerr:valid4j:0.1.0")
-```
-
 ```xml
 <!-- pom.xml -->
 <dependency>
   <groupId>io.github.jpalmerr</groupId>
   <artifactId>valid4j</artifactId>
-  <version>0.1.0</version>
+  <version>1.0.0</version>
 </dependency>
+```
+
+```groovy
+// build.gradle.kts
+implementation("io.github.jpalmerr:valid4j:1.0.0")
 ```
 
 Requires Java 21+. Zero runtime dependencies.
