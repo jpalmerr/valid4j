@@ -1,0 +1,15 @@
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+out/
+*.class
+.claude/
+planning/
+issues/
+tickets/
+.jqwik-database
