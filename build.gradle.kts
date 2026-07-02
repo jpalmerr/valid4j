@@ -11,6 +11,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+    withSourcesJar()
+    withJavadocJar()
 }
 
 repositories {
@@ -73,13 +75,46 @@ tasks.compileTestJava {
     options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror"))
 }
 
+tasks.register("verifyZeroDependencies") {
+    doLast {
+        val runtimeClasspath = configurations.runtimeClasspath.get()
+        if (runtimeClasspath.dependencies.isNotEmpty()) {
+            throw GradleException("Zero-dependency constraint violated. Found runtime dependencies: ${runtimeClasspath.dependencies.map { it.name }}")
+        }
+        println("✓ Zero-dependency constraint verified: no runtime dependencies")
+    }
+}
+
+tasks.build {
+    dependsOn("verifyZeroDependencies")
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
-            groupId = "io.github.jpalmerr"
-            artifactId = "valid4j"
-            version = "1.0.0"
+            pom {
+                name.set("valid4j")
+                description.set("Zero-dependency Java 21 library for typed error accumulation via applicative validation")
+                url.set("https://github.com/jpalmerr/valid4j")
+                licenses {
+                    license {
+                        name.set("Apache License 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/jpalmerr/valid4j")
+                    connection.set("scm:git:https://github.com/jpalmerr/valid4j.git")
+                    developerConnection.set("scm:git:https://github.com/jpalmerr/valid4j.git")
+                }
+                developers {
+                    developer {
+                        name.set("James Palmer")
+                        email.set("james.palmer@conduktor.io")
+                    }
+                }
+            }
         }
     }
 }
