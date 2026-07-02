@@ -295,6 +295,7 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
     List<A> successes = new ArrayList<>();
 
     for (Validated<E, A> v : values) {
+      Objects.requireNonNull(v, "list elements must not be null");
       switch (v) {
         case Valid<E, A>(var value) -> successes.add(value);
         case Invalid<E, A>(var error) ->
@@ -340,18 +341,19 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
     Objects.requireNonNull(v2, "v2 must not be null");
     Objects.requireNonNull(semigroup, "semigroup must not be null");
     Objects.requireNonNull(mapper, "mapper must not be null");
-    return switch (v1) {
-      case Valid<E, A>(var a) ->
-          switch (v2) {
-            case Valid<E, B>(var b) -> new Valid<>(mapper.apply(a, b));
-            case Invalid<E, B>(var e2) -> new Invalid<>(e2);
-          };
-      case Invalid<E, A>(var e1) ->
-          switch (v2) {
-            case Valid<E, B> ignored -> new Invalid<>(e1);
-            case Invalid<E, B>(var e2) -> new Invalid<>(semigroup.combine(e1, e2));
-          };
-    };
+    E err = null;
+    A a = null;
+    B b = null;
+    switch (v1) {
+      case Valid<E, A>(var val) -> a = val;
+      case Invalid<E, A>(var e) -> err = e;
+    }
+    switch (v2) {
+      case Valid<E, B>(var val) -> b = val;
+      case Invalid<E, B>(var e) -> err = (err == null) ? e : semigroup.combine(err, e);
+    }
+    if (err != null) return new Invalid<>(err);
+    return new Valid<>(mapper.apply(a, b));
   }
 
   /**

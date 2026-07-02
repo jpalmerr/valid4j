@@ -71,8 +71,11 @@ public final class ValidatedNel {
    */
   @SafeVarargs
   public static <E, A> Validated<NonEmptyList<E>, A> invalidNel(E first, E... rest) {
+    Objects.requireNonNull(first, "first error must not be null");
+    Objects.requireNonNull(rest, "rest array must not be null");
     List<E> tail = new ArrayList<>(rest.length);
     for (E element : rest) {
+      Objects.requireNonNull(element, "rest elements must not be null");
       tail.add(element);
     }
     return Validated.invalid(new NonEmptyList<>(first, tail));

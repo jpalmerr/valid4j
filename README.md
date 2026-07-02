@@ -7,7 +7,7 @@ It explores how far Java 21 features such as sealed interfaces, records, and pat
 
 Its scope is deliberately narrow, but the implementation is intended for real use: a lightweight, dependency-free option
 for teams that want typed, composable validation without adopting a larger framework or FP runtime.
-The library is backed by a comprehensive test suite, runnable examples, and CI, with an accompanying blog post explains the design tradeoffs behind the API.
+The library is backed by a comprehensive test suite, runnable examples, and CI, with an accompanying blog post that explains the design tradeoffs behind the API.
 
 See blog post [here](https://gist.github.com/jpalmerr/6cc94fa4185a5fadbe2025088b4eec7d).
 
@@ -383,7 +383,7 @@ See also [examples/async-validation.md](examples/async-validation.md) for an exp
 
 Normally when you combine two results, you short-circuit: if the first fails, you never check the second.
 
-`combine` works differently. Before checking whether any input failed, it runs all the validations. Then it inspects every result:
+`combine` works differently. All validations run before `combine` is ever invoked (at the call site). Then `combine` inspects every result:
 
 - All valid? Call the mapper with all the values.
 - Any invalid? Collect every error from every invalid input using the `Semigroup`. Ignore the valid values. Never call the mapper.
