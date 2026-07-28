@@ -247,15 +247,16 @@ Validated<NonEmptyList<String>, String> result = ValidatedNel.combine(v1, v2,
     (name, email) -> name + " <" + email + ">"
 );
 
-// Access the merged NonEmptyList:
-NonEmptyList<String> errors = ((Validated.Invalid<NonEmptyList<String>, String>) result)
-    .error();
-
-errors.toList(); // ["Name required", "Email required"]
-errors.size();   // 2 — guaranteed >= 1 by the type
+// Access the merged NonEmptyList — no cast needed:
+ValidatedNel.errors(result).ifPresent(errors -> {
+    errors.toList(); // ["Name required", "Email required"]
+    errors.size();   // 2 — guaranteed >= 1 by the type
+});
 ```
 
 All errors from every invalid input are merged into one `NonEmptyList`, preserving left-to-right order.
+To handle both cases exhaustively rather than only the failure, use the switch or `fold` shown under
+[Pattern matching](#pattern-matching).
 
 ### Custom error types
 
