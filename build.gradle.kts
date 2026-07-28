@@ -77,9 +77,12 @@ tasks.compileTestJava {
 
 tasks.register("verifyZeroDependencies") {
     doLast {
-        val runtimeClasspath = configurations.runtimeClasspath.get()
-        if (runtimeClasspath.dependencies.isNotEmpty()) {
-            throw GradleException("Zero-dependency constraint violated. Found runtime dependencies: ${runtimeClasspath.dependencies.map { it.name }}")
+        // allDependencies, not dependencies: `dependencies` ignores superconfigurations, and
+        // runtimeClasspath never has dependencies declared directly on it — they arrive via
+        // implementation/api/runtimeOnly, which it extends.
+        val declared = configurations.runtimeClasspath.get().allDependencies.map { it.name }
+        if (declared.isNotEmpty()) {
+            throw GradleException("Zero-dependency constraint violated. Found runtime dependencies: $declared")
         }
         println("✓ Zero-dependency constraint verified: no runtime dependencies")
     }
