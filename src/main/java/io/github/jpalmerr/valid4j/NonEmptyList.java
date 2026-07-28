@@ -19,10 +19,15 @@ import java.util.function.Function;
  */
 public record NonEmptyList<A>(A head, List<A> tail) implements Iterable<A> {
 
-  /** Compact constructor: validates head is non-null and defensively copies tail. */
+  /**
+   * Compact constructor: rejects null head, tail, and tail elements, then defensively copies tail.
+   */
   public NonEmptyList {
     Objects.requireNonNull(head, "head must not be null");
     Objects.requireNonNull(tail, "tail must not be null");
+    for (A element : tail) {
+      Objects.requireNonNull(element, "tail elements must not be null");
+    }
     tail = List.copyOf(tail);
   }
 
@@ -30,13 +35,14 @@ public record NonEmptyList<A>(A head, List<A> tail) implements Iterable<A> {
    * Creates a NonEmptyList from a head element and zero or more tail elements.
    *
    * @param head the first element (required, must not be null)
-   * @param rest additional elements (must not contain nulls)
+   * @param rest additional elements (must not be null, must not contain nulls)
    * @param <A> element type
    * @return a new NonEmptyList
    */
   @SafeVarargs
   public static <A> NonEmptyList<A> of(A head, A... rest) {
     Objects.requireNonNull(head, "head must not be null");
+    Objects.requireNonNull(rest, "rest array must not be null");
     List<A> tail = new ArrayList<>(rest.length);
     for (A element : rest) {
       Objects.requireNonNull(element, "tail elements must not be null");
@@ -48,7 +54,7 @@ public record NonEmptyList<A>(A head, List<A> tail) implements Iterable<A> {
   /**
    * Tries to create a NonEmptyList from a standard list.
    *
-   * @param list source list (must not be null)
+   * @param list source list (must not be null, must not contain nulls)
    * @param <A> element type
    * @return {@code Optional.empty()} if the list is empty, otherwise a present NonEmptyList
    */
@@ -104,7 +110,7 @@ public record NonEmptyList<A>(A head, List<A> tail) implements Iterable<A> {
   /**
    * Transforms every element using the provided function.
    *
-   * @param f mapping function (must not be null)
+   * @param f mapping function (must not be null, must not return null)
    * @param <B> result element type
    * @return a new NonEmptyList with all elements transformed
    */

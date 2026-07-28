@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,27 @@ class NonEmptyListTest {
   @Test
   void of_nullHead_throwsNullPointerException() {
     assertThatNullPointerException().isThrownBy(() -> NonEmptyList.of(null, "a", "b"));
+  }
+
+  @Test
+  void of_nullRestArray_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> NonEmptyList.of("a", (String[]) null))
+        .withMessage("rest array must not be null");
+  }
+
+  @Test
+  void constructor_nullTailElement_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> new NonEmptyList<>("a", Arrays.asList("b", null)))
+        .withMessage("tail elements must not be null");
+  }
+
+  @Test
+  void fromList_nullElementAfterHead_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> NonEmptyList.fromList(Arrays.asList("a", null)))
+        .withMessage("tail elements must not be null");
   }
 
   @Test
