@@ -35,6 +35,10 @@ valid4j gives you a `Validated<E, A>` type where:
 
 ## Quick Start
 
+> **Not yet on Maven Central.** The coordinates below are the intended ones; until the first release
+> is published, clone the repository and run `./gradlew publishToMavenLocal`. Gradle itself must run
+> on a JDK it supports — check the note below the coordinates before you run it.
+
 ```xml
 <!-- pom.xml -->
 <dependency>
