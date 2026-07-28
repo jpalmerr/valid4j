@@ -49,7 +49,10 @@ valid4j gives you a `Validated<E, A>` type where:
 implementation("io.github.jpalmerr:valid4j:1.0.0")
 ```
 
-Requires Java 21+. Zero runtime dependencies.
+Requires Java 21+ at runtime. Zero runtime dependencies.
+
+To build from source, run Gradle on a JDK it supports (8–23 for the pinned Gradle version) —
+newer JDKs fail in Gradle's Kotlin DSL compiler, not in valid4j.
 
 ---
 
