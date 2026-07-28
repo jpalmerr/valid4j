@@ -347,6 +347,140 @@ class ValidatedCombineTest {
     assertThat(error.toList()).containsExactly("e1", "e3", "e5", "e7");
   }
 
+  @Test
+  void combine5_allInvalid_accumulatesAllErrorsInOrder() {
+    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.invalidNel("e1");
+    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.invalidNel("e2");
+    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.invalidNel("e3");
+    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.invalidNel("e4");
+    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.invalidNel("e5");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            v1, v2, v3, v4, v5, Semigroup.nonEmptyList(), (a, b, c, d, f) -> a + b + c + d + f);
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("e1", "e2", "e3", "e4", "e5"));
+  }
+
+  @Test
+  void combine7_allInvalid_accumulatesAllErrorsInOrder() {
+    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.invalidNel("e1");
+    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.invalidNel("e2");
+    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.invalidNel("e3");
+    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.invalidNel("e4");
+    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.invalidNel("e5");
+    Validated<NonEmptyList<String>, Integer> v6 = ValidatedNel.invalidNel("e6");
+    Validated<NonEmptyList<String>, Integer> v7 = ValidatedNel.invalidNel("e7");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            v6,
+            v7,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d, f, g, h) -> a + b + c + d + f + g + h);
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("e1", "e2", "e3", "e4", "e5", "e6", "e7"));
+  }
+
+  @Test
+  void combine4_firstAndLastInvalid_accumulatesOnlyThoseTwoInOrder() {
+    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.invalidNel("first");
+    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
+    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
+    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.invalidNel("last");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(v1, v2, v3, v4, Semigroup.nonEmptyList(), (a, b, c, d) -> a + b + c + d);
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("first", "last"));
+  }
+
+  @Test
+  void combine5_firstAndLastInvalid_accumulatesOnlyThoseTwoInOrder() {
+    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.invalidNel("first");
+    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
+    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
+    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.validNel(4);
+    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.invalidNel("last");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            v1, v2, v3, v4, v5, Semigroup.nonEmptyList(), (a, b, c, d, f) -> a + b + c + d + f);
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("first", "last"));
+  }
+
+  @Test
+  void combine6_firstAndLastInvalid_accumulatesOnlyThoseTwoInOrder() {
+    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.invalidNel("first");
+    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
+    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
+    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.validNel(4);
+    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.validNel(5);
+    Validated<NonEmptyList<String>, Integer> v6 = ValidatedNel.invalidNel("last");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            v6,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d, f, g) -> a + b + c + d + f + g);
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("first", "last"));
+  }
+
+  @Test
+  void combine7_firstAndLastInvalid_accumulatesOnlyThoseTwoInOrder() {
+    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.invalidNel("first");
+    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
+    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
+    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.validNel(4);
+    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.validNel(5);
+    Validated<NonEmptyList<String>, Integer> v6 = ValidatedNel.validNel(6);
+    Validated<NonEmptyList<String>, Integer> v7 = ValidatedNel.invalidNel("last");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            v6,
+            v7,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d, f, g, h) -> a + b + c + d + f + g + h);
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("first", "last"));
+  }
+
   // -------------------------------------------------------------------------
   // Critical: error order, no short-circuit
   // -------------------------------------------------------------------------
@@ -495,6 +629,141 @@ class ValidatedCombineTest {
         });
 
     assertThat(mapperCalled).isFalse();
+  }
+
+  @Test
+  void combine4_lastInvalid_mapperIsNeverCalled() {
+    AtomicBoolean called = new AtomicBoolean(false);
+    Validated<NonEmptyList<String>, Integer> valid = ValidatedNel.validNel(1);
+    Validated<NonEmptyList<String>, Integer> invalid = ValidatedNel.invalidNel("boom");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            valid,
+            valid,
+            valid,
+            invalid,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d) -> {
+              called.set(true);
+              return 0;
+            });
+
+    assertThat(called).isFalse();
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("boom"));
+  }
+
+  @Test
+  void combine5_lastInvalid_mapperIsNeverCalled() {
+    AtomicBoolean called = new AtomicBoolean(false);
+    Validated<NonEmptyList<String>, Integer> valid = ValidatedNel.validNel(1);
+    Validated<NonEmptyList<String>, Integer> invalid = ValidatedNel.invalidNel("boom");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            valid,
+            valid,
+            valid,
+            valid,
+            invalid,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d, f) -> {
+              called.set(true);
+              return 0;
+            });
+
+    assertThat(called).isFalse();
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("boom"));
+  }
+
+  @Test
+  void combine6_lastInvalid_mapperIsNeverCalled() {
+    AtomicBoolean called = new AtomicBoolean(false);
+    Validated<NonEmptyList<String>, Integer> valid = ValidatedNel.validNel(1);
+    Validated<NonEmptyList<String>, Integer> invalid = ValidatedNel.invalidNel("boom");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            valid,
+            valid,
+            valid,
+            valid,
+            valid,
+            invalid,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d, f, g) -> {
+              called.set(true);
+              return 0;
+            });
+
+    assertThat(called).isFalse();
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("boom"));
+  }
+
+  @Test
+  void combine7_lastInvalid_mapperIsNeverCalled() {
+    AtomicBoolean called = new AtomicBoolean(false);
+    Validated<NonEmptyList<String>, Integer> valid = ValidatedNel.validNel(1);
+    Validated<NonEmptyList<String>, Integer> invalid = ValidatedNel.invalidNel("boom");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            valid,
+            valid,
+            valid,
+            valid,
+            valid,
+            valid,
+            invalid,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d, f, g, h) -> {
+              called.set(true);
+              return 0;
+            });
+
+    assertThat(called).isFalse();
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("boom"));
+  }
+
+  @Test
+  void combine8_lastInvalid_mapperIsNeverCalled() {
+    AtomicBoolean called = new AtomicBoolean(false);
+    Validated<NonEmptyList<String>, Integer> valid = ValidatedNel.validNel(1);
+    Validated<NonEmptyList<String>, Integer> invalid = ValidatedNel.invalidNel("boom");
+
+    Validated<NonEmptyList<String>, Integer> result =
+        Validated.combine(
+            valid,
+            valid,
+            valid,
+            valid,
+            valid,
+            valid,
+            valid,
+            invalid,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d, f, g, h, i) -> {
+              called.set(true);
+              return 0;
+            });
+
+    assertThat(called).isFalse();
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("boom"));
   }
 
   // -------------------------------------------------------------------------
