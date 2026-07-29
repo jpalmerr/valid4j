@@ -5,8 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import net.jqwik.api.Arbitraries;
+import net.jqwik.api.Arbitrary;
+import net.jqwik.api.Combinators;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
+import net.jqwik.api.Provide;
 import net.jqwik.api.constraints.IntRange;
 import net.jqwik.api.constraints.Size;
 import net.jqwik.api.constraints.StringLength;
@@ -14,22 +18,37 @@ import net.jqwik.api.constraints.StringLength;
 class PropertyTest {
 
   // -------------------------------------------------------------------------
-  // NonEmptyList.appendAll — associativity
+  // NonEmptyList.appendAll
   // -------------------------------------------------------------------------
 
+  @Provide
+  Arbitrary<NonEmptyList<String>> nonEmptyLists() {
+    return Combinators.combine(
+            Arbitraries.strings().alpha().ofMaxLength(3),
+            Arbitraries.strings().alpha().ofMaxLength(3).list().ofMaxSize(4))
+        .as(NonEmptyList::new);
+  }
+
+  // Logically subsumed by the concatenation property below, and kept anyway: this is the
+  // executable form of the associativity law Semigroup documents as mandatory and that
+  // Semigroup.nonEmptyList() inherits by delegating straight to appendAll.
   @Property
   void nonEmptyListAppendAll_associativity(
-      @ForAll @StringLength(max = 5) String headA,
-      @ForAll @StringLength(max = 5) String headB,
-      @ForAll @StringLength(max = 5) String headC) {
-    NonEmptyList<String> a = NonEmptyList.of(headA);
-    NonEmptyList<String> b = NonEmptyList.of(headB);
-    NonEmptyList<String> c = NonEmptyList.of(headC);
+      @ForAll("nonEmptyLists") NonEmptyList<String> a,
+      @ForAll("nonEmptyLists") NonEmptyList<String> b,
+      @ForAll("nonEmptyLists") NonEmptyList<String> c) {
+    assertThat(a.appendAll(b).appendAll(c)).isEqualTo(a.appendAll(b.appendAll(c)));
+  }
 
-    NonEmptyList<String> leftAssoc = a.appendAll(b).appendAll(c);
-    NonEmptyList<String> rightAssoc = a.appendAll(b.appendAll(c));
+  @Property
+  void nonEmptyListAppendAll_concatenatesElementsInOrder(
+      @ForAll("nonEmptyLists") NonEmptyList<String> a,
+      @ForAll("nonEmptyLists") NonEmptyList<String> b) {
+    List<String> expected = new ArrayList<>(a.toList());
+    expected.addAll(b.toList());
 
-    assertThat(leftAssoc).isEqualTo(rightAssoc);
+    assertThat(a.appendAll(b).toList()).isEqualTo(expected);
+    assertThat(a.appendAll(b).size()).isEqualTo(a.size() + b.size());
   }
 
   // -------------------------------------------------------------------------

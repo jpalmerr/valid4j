@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
 class ValidatedTest {
@@ -171,23 +173,37 @@ class ValidatedTest {
   // -------------------------------------------------------------------------
 
   @Test
-  void andThen_onValid_appliesFunction() {
+  void andThen_onValid_appliesFunctionExactlyOnce() {
+    AtomicInteger calls = new AtomicInteger();
+    Function<Integer, Validated<String, Integer>> doubler =
+        n -> {
+          calls.incrementAndGet();
+          return Validated.valid(n * 2);
+        };
     Validated<String, Integer> valid = Validated.valid(10);
 
-    Validated<String, Integer> result = valid.andThen(n -> Validated.valid(n * 2));
+    Validated<String, Integer> result = valid.andThen(doubler);
 
     assertThat(result).isInstanceOf(Validated.Valid.class);
     assertThat(((Validated.Valid<String, Integer>) result).value()).isEqualTo(20);
+    assertThat(calls).hasValue(1);
   }
 
   @Test
-  void andThen_onInvalid_propagatesError() {
+  void andThen_onInvalid_propagatesErrorWithoutCallingTheFunction() {
+    AtomicInteger calls = new AtomicInteger();
+    Function<Integer, Validated<String, Integer>> doubler =
+        n -> {
+          calls.incrementAndGet();
+          return Validated.valid(n * 2);
+        };
     Validated<String, Integer> invalid = Validated.invalid("err");
 
-    Validated<String, Integer> result = invalid.andThen(n -> Validated.valid(n * 2));
+    Validated<String, Integer> result = invalid.andThen(doubler);
 
     assertThat(result).isInstanceOf(Validated.Invalid.class);
     assertThat(((Validated.Invalid<String, Integer>) result).error()).isEqualTo("err");
+    assertThat(calls).hasValue(0);
   }
 
   @Test
