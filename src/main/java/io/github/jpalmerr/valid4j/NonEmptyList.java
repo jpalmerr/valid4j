@@ -20,15 +20,19 @@ import java.util.function.Function;
 public record NonEmptyList<A>(A head, List<A> tail) implements Iterable<A> {
 
   /**
-   * Compact constructor: rejects null head, tail, and tail elements, then defensively copies tail.
+   * Compact constructor: rejects null head and tail, defensively copies tail, then rejects null
+   * tail elements.
    */
   public NonEmptyList {
     Objects.requireNonNull(head, "head must not be null");
     Objects.requireNonNull(tail, "tail must not be null");
-    for (A element : tail) {
+    // Copy before checking elements: checking the caller's list first leaves a window in which a
+    // concurrent mutation can replace a checked element with null.
+    List<A> copy = new ArrayList<>(tail);
+    for (A element : copy) {
       Objects.requireNonNull(element, "tail elements must not be null");
     }
-    tail = List.copyOf(tail);
+    tail = Collections.unmodifiableList(copy);
   }
 
   /**
