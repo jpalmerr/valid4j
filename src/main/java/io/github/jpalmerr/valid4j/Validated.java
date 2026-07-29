@@ -131,7 +131,7 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
    *
    * @param f the mapping function (must not be null)
    * @param <B> the result value type
-   * @return a new {@code Valid<E, B>} if valid, or the same {@code Invalid<E, B>} if invalid
+   * @return a new {@code Valid<E, B>} if valid, or an equal {@code Invalid<E, B>} if invalid
    */
   default <B> Validated<E, B> map(Function<? super A, ? extends B> f) {
     Objects.requireNonNull(f, "f must not be null");
@@ -147,7 +147,7 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
    *
    * @param f the error mapping function (must not be null)
    * @param <F> the result error type
-   * @return a new {@code Invalid<F, A>} if invalid, or the same {@code Valid<F, A>} if valid
+   * @return a new {@code Invalid<F, A>} if invalid, or an equal {@code Valid<F, A>} if valid
    */
   default <F> Validated<F, A> mapError(Function<? super E, ? extends F> f) {
     Objects.requireNonNull(f, "f must not be null");
@@ -200,7 +200,7 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
    *
    * @param f the function to apply to the value if valid (must not be null)
    * @param <B> the result value type
-   * @return the result of {@code f} if valid, or this {@link Invalid} propagated
+   * @return the result of {@code f} if valid, or an equal {@link Invalid} if invalid
    */
   default <B> Validated<E, B> andThen(Function<? super A, ? extends Validated<E, B>> f) {
     Objects.requireNonNull(f, "f must not be null");
