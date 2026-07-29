@@ -45,7 +45,7 @@ public record NonEmptyList<A>(A head, List<A> tail) implements Iterable<A> {
     Objects.requireNonNull(rest, "rest array must not be null");
     List<A> tail = new ArrayList<>(rest.length);
     for (A element : rest) {
-      Objects.requireNonNull(element, "tail elements must not be null");
+      Objects.requireNonNull(element, "rest elements must not be null");
       tail.add(element);
     }
     return new NonEmptyList<>(head, tail);

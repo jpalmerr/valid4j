@@ -799,6 +799,13 @@ class ValidatedCombineTest {
 
   // -------------------------------------------------------------------------
   // Null parameter validation on combine
+  //
+  // Pins the last positional message at each arity, plus v1 at arity 2.
+  // Mid-position messages at arity >= 3 are deliberately not pinned: each arity
+  // is copy-and-extended from the one below, so only the appended check is new.
+  // A message that duplicates one already asserted elsewhere is invisible to the
+  // declared-vs-asserted string comparison, so coverage is per-string, not
+  // per-call-site.
   // -------------------------------------------------------------------------
 
   @Test
@@ -829,6 +836,109 @@ class ValidatedCombineTest {
 
     assertThatNullPointerException()
         .isThrownBy(() -> Validated.combine(v1, v2, semigroup, null))
+        .withMessage("mapper must not be null");
+  }
+
+  @Test
+  void combine2_nullLastInput_throwsNullPointerExceptionWithItsOwnMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(() -> Validated.combine(v, null, Semigroup.nonEmptyList(), Integer::sum))
+        .withMessage("v2 must not be null");
+  }
+
+  @Test
+  void combine3_nullLastInput_throwsNullPointerExceptionWithItsOwnMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(() -> Validated.combine(v, v, null, Semigroup.nonEmptyList(), (a, b, c) -> 0))
+        .withMessage("v3 must not be null");
+  }
+
+  @Test
+  void combine4_nullLastInput_throwsNullPointerExceptionWithItsOwnMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(
+            () -> Validated.combine(v, v, v, null, Semigroup.nonEmptyList(), (a, b, c, d) -> 0))
+        .withMessage("v4 must not be null");
+  }
+
+  @Test
+  void combine5_nullLastInput_throwsNullPointerExceptionWithItsOwnMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(
+            () ->
+                Validated.combine(v, v, v, v, null, Semigroup.nonEmptyList(), (a, b, c, d, f) -> 0))
+        .withMessage("v5 must not be null");
+  }
+
+  @Test
+  void combine6_nullLastInput_throwsNullPointerExceptionWithItsOwnMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(
+            () ->
+                Validated.combine(
+                    v, v, v, v, v, null, Semigroup.nonEmptyList(), (a, b, c, d, f, g) -> 0))
+        .withMessage("v6 must not be null");
+  }
+
+  @Test
+  void combine7_nullLastInput_throwsNullPointerExceptionWithItsOwnMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(
+            () ->
+                Validated.combine(
+                    v, v, v, v, v, v, null, Semigroup.nonEmptyList(), (a, b, c, d, f, g, h) -> 0))
+        .withMessage("v7 must not be null");
+  }
+
+  @Test
+  void combine8_nullLastInput_throwsNullPointerExceptionWithItsOwnMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(
+            () ->
+                Validated.combine(
+                    v,
+                    v,
+                    v,
+                    v,
+                    v,
+                    v,
+                    v,
+                    null,
+                    Semigroup.nonEmptyList(),
+                    (a, b, c, d, f, g, h, i) -> 0))
+        .withMessage("v8 must not be null");
+  }
+
+  @Test
+  void combine8_nullSemigroup_throwsNullPointerExceptionWithMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(
+            () -> Validated.combine(v, v, v, v, v, v, v, v, null, (a, b, c, d, f, g, h, i) -> 0))
+        .withMessage("semigroup must not be null");
+  }
+
+  @Test
+  void combine8_nullMapper_throwsNullPointerExceptionWithMessage() {
+    Validated<NonEmptyList<String>, Integer> v = ValidatedNel.validNel(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(() -> Validated.combine(v, v, v, v, v, v, v, v, Semigroup.nonEmptyList(), null))
         .withMessage("mapper must not be null");
   }
 }

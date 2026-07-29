@@ -21,8 +21,10 @@ class ValidatedTest {
   }
 
   @Test
-  void valid_nullValue_throwsNullPointerException() {
-    assertThatNullPointerException().isThrownBy(() -> Validated.valid(null));
+  void valid_null_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> Validated.valid(null))
+        .withMessage("value must not be null");
   }
 
   @Test
@@ -34,8 +36,10 @@ class ValidatedTest {
   }
 
   @Test
-  void invalid_nullError_throwsNullPointerException() {
-    assertThatNullPointerException().isThrownBy(() -> Validated.invalid(null));
+  void invalid_null_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> Validated.invalid(null))
+        .withMessage("error must not be null");
   }
 
   // -------------------------------------------------------------------------

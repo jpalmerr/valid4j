@@ -30,8 +30,10 @@ class NonEmptyListTest {
   }
 
   @Test
-  void of_nullHead_throwsNullPointerException() {
-    assertThatNullPointerException().isThrownBy(() -> NonEmptyList.of(null, "a", "b"));
+  void of_nullHead_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> NonEmptyList.of(null, "a", "b"))
+        .withMessage("head must not be null");
   }
 
   @Test
@@ -42,6 +44,13 @@ class NonEmptyListTest {
   }
 
   @Test
+  void of_nullRestElement_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> NonEmptyList.of("a", "b", null))
+        .withMessage("rest elements must not be null");
+  }
+
+  @Test
   void constructor_nullTailElement_throwsNullPointerExceptionWithMessage() {
     assertThatNullPointerException()
         .isThrownBy(() -> new NonEmptyList<>("a", Arrays.asList("b", null)))
@@ -49,10 +58,38 @@ class NonEmptyListTest {
   }
 
   @Test
+  void constructor_nullTail_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> new NonEmptyList<>("a", null))
+        .withMessage("tail must not be null");
+  }
+
+  @Test
   void fromList_nullElementAfterHead_throwsNullPointerExceptionWithMessage() {
     assertThatNullPointerException()
         .isThrownBy(() -> NonEmptyList.fromList(Arrays.asList("a", null)))
         .withMessage("tail elements must not be null");
+  }
+
+  @Test
+  void fromList_null_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> NonEmptyList.fromList(null))
+        .withMessage("list must not be null");
+  }
+
+  @Test
+  void append_null_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> NonEmptyList.of("a").append(null))
+        .withMessage("element must not be null");
+  }
+
+  @Test
+  void appendAll_null_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> NonEmptyList.of("a").appendAll(null))
+        .withMessage("other must not be null");
   }
 
   @Test

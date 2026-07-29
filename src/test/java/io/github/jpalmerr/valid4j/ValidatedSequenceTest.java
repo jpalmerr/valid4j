@@ -3,6 +3,7 @@ package io.github.jpalmerr.valid4j;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -121,6 +122,17 @@ class ValidatedSequenceTest {
     assertThatNullPointerException()
         .isThrownBy(() -> ValidatedNel.sequence(null))
         .withMessage("values must not be null");
+  }
+
+  @Test
+  void sequence_nullElement_throwsNullPointerExceptionWithMessage() {
+    List<Validated<String, Integer>> withNull = new ArrayList<>();
+    withNull.add(Validated.valid(1));
+    withNull.add(null);
+
+    assertThatNullPointerException()
+        .isThrownBy(() -> Validated.sequence(withNull, (a, b) -> a + b))
+        .withMessage("list elements must not be null");
   }
 
   // -------------------------------------------------------------------------

@@ -60,6 +60,38 @@ class ValidatedNelTest {
   }
 
   // -------------------------------------------------------------------------
+  // invalidNel — null contract
+  // -------------------------------------------------------------------------
+
+  @Test
+  void invalidNel_nullError_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> ValidatedNel.invalidNel(null))
+        .withMessage("error must not be null");
+  }
+
+  @Test
+  void invalidNel_nullFirstOfVarargs_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> ValidatedNel.invalidNel(null, "e2"))
+        .withMessage("first error must not be null");
+  }
+
+  @Test
+  void invalidNel_nullRestArray_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> ValidatedNel.invalidNel("e1", (String[]) null))
+        .withMessage("rest array must not be null");
+  }
+
+  @Test
+  void invalidNel_nullRestElement_throwsNullPointerExceptionWithMessage() {
+    assertThatNullPointerException()
+        .isThrownBy(() -> ValidatedNel.invalidNel("e1", "e2", null))
+        .withMessage("rest elements must not be null");
+  }
+
+  // -------------------------------------------------------------------------
   // errors() extractor
   // -------------------------------------------------------------------------
 
