@@ -283,8 +283,8 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
    *     null)
    * @param <E> the error type
    * @param <A> the value type
-   * @return {@link Valid} with all values if all are valid, or {@link Invalid} with accumulated
-   *     errors
+   * @return {@link Valid} wrapping an unmodifiable list of all values if all are valid, or {@link
+   *     Invalid} with accumulated errors
    */
   static <E, A> Validated<E, List<A>> sequence(
       List<Validated<E, A>> values, Semigroup<E> semigroup) {

@@ -256,8 +256,8 @@ public final class ValidatedNel {
    * @param values the list of validated values to sequence (must not be null)
    * @param <E> the error element type
    * @param <A> the value type
-   * @return {@link Validated.Valid} with all values if all are valid, or {@link Validated.Invalid}
-   *     with all errors appended into one {@link NonEmptyList}
+   * @return {@link Validated.Valid} wrapping an unmodifiable list of all values if all are valid,
+   *     or {@link Validated.Invalid} with all errors appended into one {@link NonEmptyList}
    */
   public static <E, A> Validated<NonEmptyList<E>, List<A>> sequence(
       List<Validated<NonEmptyList<E>, A>> values) {

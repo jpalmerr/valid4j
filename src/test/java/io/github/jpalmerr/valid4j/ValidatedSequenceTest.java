@@ -2,6 +2,7 @@ package io.github.jpalmerr.valid4j;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,9 @@ class ValidatedSequenceTest {
     Validated<NonEmptyList<String>, List<Integer>> result = ValidatedNel.sequence(inputs);
 
     assertThat(result).isInstanceOf(Validated.Valid.class);
-    assertThat(((Validated.Valid<NonEmptyList<String>, List<Integer>>) result).value())
-        .containsExactly(1, 2, 3);
+    List<Integer> values = ((Validated.Valid<NonEmptyList<String>, List<Integer>>) result).value();
+    assertThat(values).containsExactly(1, 2, 3);
+    assertThatThrownBy(() -> values.add(4)).isInstanceOf(UnsupportedOperationException.class);
   }
 
   @Test
