@@ -130,49 +130,54 @@ class ValidatedCombineTest {
   }
 
   // -------------------------------------------------------------------------
-  // Validated.combine4 through combine8 — one happy path each
+  // Validated.combine4 through combine8 — positional happy paths
   // -------------------------------------------------------------------------
 
   @Test
-  void combine4_allValid_appliesMapper() {
-    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.validNel(1);
-    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
-    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
-    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.validNel(4);
+  void combine4_allValid_appliesMapperWithArgumentsInPositionalOrder() {
+    Validated<NonEmptyList<String>, String> v1 = ValidatedNel.validNel("1st");
+    Validated<NonEmptyList<String>, String> v2 = ValidatedNel.validNel("2nd");
+    Validated<NonEmptyList<String>, String> v3 = ValidatedNel.validNel("3rd");
+    Validated<NonEmptyList<String>, String> v4 = ValidatedNel.validNel("4th");
 
-    Validated<NonEmptyList<String>, Integer> result =
-        Validated.combine(v1, v2, v3, v4, Semigroup.nonEmptyList(), (a, b, c, d) -> a + b + c + d);
-
-    assertThat(result).isInstanceOf(Validated.Valid.class);
-    assertThat(((Validated.Valid<NonEmptyList<String>, Integer>) result).value()).isEqualTo(10);
-  }
-
-  @Test
-  void combine5_allValid_appliesMapper() {
-    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.validNel(1);
-    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
-    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
-    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.validNel(4);
-    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.validNel(5);
-
-    Validated<NonEmptyList<String>, Integer> result =
+    Validated<NonEmptyList<String>, String> result =
         Validated.combine(
-            v1, v2, v3, v4, v5, Semigroup.nonEmptyList(), (a, b, c, d, e) -> a + b + c + d + e);
+            v1, v2, v3, v4, Semigroup.nonEmptyList(), (a, b, c, d) -> String.join("|", a, b, c, d));
 
-    assertThat(result).isInstanceOf(Validated.Valid.class);
-    assertThat(((Validated.Valid<NonEmptyList<String>, Integer>) result).value()).isEqualTo(15);
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th"));
   }
 
   @Test
-  void combine6_allValid_appliesMapper() {
-    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.validNel(1);
-    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
-    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
-    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.validNel(4);
-    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.validNel(5);
-    Validated<NonEmptyList<String>, Integer> v6 = ValidatedNel.validNel(6);
+  void combine5_allValid_appliesMapperWithArgumentsInPositionalOrder() {
+    Validated<NonEmptyList<String>, String> v1 = ValidatedNel.validNel("1st");
+    Validated<NonEmptyList<String>, String> v2 = ValidatedNel.validNel("2nd");
+    Validated<NonEmptyList<String>, String> v3 = ValidatedNel.validNel("3rd");
+    Validated<NonEmptyList<String>, String> v4 = ValidatedNel.validNel("4th");
+    Validated<NonEmptyList<String>, String> v5 = ValidatedNel.validNel("5th");
 
-    Validated<NonEmptyList<String>, Integer> result =
+    Validated<NonEmptyList<String>, String> result =
+        Validated.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            Semigroup.nonEmptyList(),
+            (a, b, c, d, f) -> String.join("|", a, b, c, d, f));
+
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th|5th"));
+  }
+
+  @Test
+  void combine6_allValid_appliesMapperWithArgumentsInPositionalOrder() {
+    Validated<NonEmptyList<String>, String> v1 = ValidatedNel.validNel("1st");
+    Validated<NonEmptyList<String>, String> v2 = ValidatedNel.validNel("2nd");
+    Validated<NonEmptyList<String>, String> v3 = ValidatedNel.validNel("3rd");
+    Validated<NonEmptyList<String>, String> v4 = ValidatedNel.validNel("4th");
+    Validated<NonEmptyList<String>, String> v5 = ValidatedNel.validNel("5th");
+    Validated<NonEmptyList<String>, String> v6 = ValidatedNel.validNel("6th");
+
+    Validated<NonEmptyList<String>, String> result =
         Validated.combine(
             v1,
             v2,
@@ -181,23 +186,22 @@ class ValidatedCombineTest {
             v5,
             v6,
             Semigroup.nonEmptyList(),
-            (a, b, c, d, e, f) -> a + b + c + d + e + f);
+            (a, b, c, d, f, g) -> String.join("|", a, b, c, d, f, g));
 
-    assertThat(result).isInstanceOf(Validated.Valid.class);
-    assertThat(((Validated.Valid<NonEmptyList<String>, Integer>) result).value()).isEqualTo(21);
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th|5th|6th"));
   }
 
   @Test
-  void combine7_allValid_appliesMapper() {
-    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.validNel(1);
-    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
-    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
-    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.validNel(4);
-    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.validNel(5);
-    Validated<NonEmptyList<String>, Integer> v6 = ValidatedNel.validNel(6);
-    Validated<NonEmptyList<String>, Integer> v7 = ValidatedNel.validNel(7);
+  void combine7_allValid_appliesMapperWithArgumentsInPositionalOrder() {
+    Validated<NonEmptyList<String>, String> v1 = ValidatedNel.validNel("1st");
+    Validated<NonEmptyList<String>, String> v2 = ValidatedNel.validNel("2nd");
+    Validated<NonEmptyList<String>, String> v3 = ValidatedNel.validNel("3rd");
+    Validated<NonEmptyList<String>, String> v4 = ValidatedNel.validNel("4th");
+    Validated<NonEmptyList<String>, String> v5 = ValidatedNel.validNel("5th");
+    Validated<NonEmptyList<String>, String> v6 = ValidatedNel.validNel("6th");
+    Validated<NonEmptyList<String>, String> v7 = ValidatedNel.validNel("7th");
 
-    Validated<NonEmptyList<String>, Integer> result =
+    Validated<NonEmptyList<String>, String> result =
         Validated.combine(
             v1,
             v2,
@@ -207,24 +211,23 @@ class ValidatedCombineTest {
             v6,
             v7,
             Semigroup.nonEmptyList(),
-            (a, b, c, d, e, f, g) -> a + b + c + d + e + f + g);
+            (a, b, c, d, f, g, h) -> String.join("|", a, b, c, d, f, g, h));
 
-    assertThat(result).isInstanceOf(Validated.Valid.class);
-    assertThat(((Validated.Valid<NonEmptyList<String>, Integer>) result).value()).isEqualTo(28);
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th|5th|6th|7th"));
   }
 
   @Test
-  void combine8_allValid_appliesMapper() {
-    Validated<NonEmptyList<String>, Integer> v1 = ValidatedNel.validNel(1);
-    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
-    Validated<NonEmptyList<String>, Integer> v3 = ValidatedNel.validNel(3);
-    Validated<NonEmptyList<String>, Integer> v4 = ValidatedNel.validNel(4);
-    Validated<NonEmptyList<String>, Integer> v5 = ValidatedNel.validNel(5);
-    Validated<NonEmptyList<String>, Integer> v6 = ValidatedNel.validNel(6);
-    Validated<NonEmptyList<String>, Integer> v7 = ValidatedNel.validNel(7);
-    Validated<NonEmptyList<String>, Integer> v8 = ValidatedNel.validNel(8);
+  void combine8_allValid_appliesMapperWithArgumentsInPositionalOrder() {
+    Validated<NonEmptyList<String>, String> v1 = ValidatedNel.validNel("1st");
+    Validated<NonEmptyList<String>, String> v2 = ValidatedNel.validNel("2nd");
+    Validated<NonEmptyList<String>, String> v3 = ValidatedNel.validNel("3rd");
+    Validated<NonEmptyList<String>, String> v4 = ValidatedNel.validNel("4th");
+    Validated<NonEmptyList<String>, String> v5 = ValidatedNel.validNel("5th");
+    Validated<NonEmptyList<String>, String> v6 = ValidatedNel.validNel("6th");
+    Validated<NonEmptyList<String>, String> v7 = ValidatedNel.validNel("7th");
+    Validated<NonEmptyList<String>, String> v8 = ValidatedNel.validNel("8th");
 
-    Validated<NonEmptyList<String>, Integer> result =
+    Validated<NonEmptyList<String>, String> result =
         Validated.combine(
             v1,
             v2,
@@ -235,10 +238,38 @@ class ValidatedCombineTest {
             v7,
             v8,
             Semigroup.nonEmptyList(),
-            (a, b, c, d, e, f, g, h) -> a + b + c + d + e + f + g + h);
+            (a, b, c, d, f, g, h, i) -> String.join("|", a, b, c, d, f, g, h, i));
 
-    assertThat(result).isInstanceOf(Validated.Valid.class);
-    assertThat(((Validated.Valid<NonEmptyList<String>, Integer>) result).value()).isEqualTo(36);
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th|5th|6th|7th|8th"));
+  }
+
+  // Distinct types: the only test that breaks if two positions ever share one type parameter.
+  @Test
+  void combine8_allValidWithDistinctTypes_threadsEachPositionToItsOwnMapperParameter() {
+    Validated<NonEmptyList<String>, String> v1 = ValidatedNel.validNel("s");
+    Validated<NonEmptyList<String>, Integer> v2 = ValidatedNel.validNel(2);
+    Validated<NonEmptyList<String>, Long> v3 = ValidatedNel.validNel(3L);
+    Validated<NonEmptyList<String>, Double> v4 = ValidatedNel.validNel(4.5);
+    Validated<NonEmptyList<String>, Boolean> v5 = ValidatedNel.validNel(true);
+    Validated<NonEmptyList<String>, Character> v6 = ValidatedNel.validNel('c');
+    Validated<NonEmptyList<String>, Byte> v7 = ValidatedNel.validNel((byte) 7);
+    Validated<NonEmptyList<String>, Short> v8 = ValidatedNel.validNel((short) 8);
+
+    Validated<NonEmptyList<String>, String> result =
+        Validated.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            v6,
+            v7,
+            v8,
+            Semigroup.nonEmptyList(),
+            (String a, Integer b, Long c, Double d, Boolean f, Character g, Byte h, Short i) ->
+                a + "|" + b + "|" + c + "|" + d + "|" + f + "|" + g + "|" + h + "|" + i);
+
+    assertThat(result).isEqualTo(Validated.valid("s|2|3|4.5|true|c|7|8"));
   }
 
   // -------------------------------------------------------------------------
@@ -263,7 +294,7 @@ class ValidatedCombineTest {
             v5,
             v6,
             Semigroup.nonEmptyList(),
-            (a, b, c, d, e, f) -> a + b + c + d + e + f);
+            (a, b, c, d, f, g) -> a + b + c + d + f + g);
 
     assertThat(result).isInstanceOf(Validated.Invalid.class);
     NonEmptyList<String> error =
@@ -309,7 +340,7 @@ class ValidatedCombineTest {
             v7,
             v8,
             Semigroup.nonEmptyList(),
-            (a, b, c, d, e, f, g, h) -> a + b + c + d + e + f + g + h);
+            (a, b, c, d, f, g, h, i) -> a + b + c + d + f + g + h + i);
 
     assertThat(result).isInstanceOf(Validated.Invalid.class);
     NonEmptyList<String> error =
@@ -339,7 +370,7 @@ class ValidatedCombineTest {
             v7,
             v8,
             Semigroup.nonEmptyList(),
-            (a, b, c, d, e, f, g, h) -> a + b + c + d + e + f + g + h);
+            (a, b, c, d, f, g, h, i) -> a + b + c + d + f + g + h + i);
 
     assertThat(result).isInstanceOf(Validated.Invalid.class);
     NonEmptyList<String> error =
