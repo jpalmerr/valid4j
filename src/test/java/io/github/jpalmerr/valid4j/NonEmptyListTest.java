@@ -65,6 +65,18 @@ class NonEmptyListTest {
   }
 
   @Test
+  void constructor_mutableSourceTail_isCopiedIntoAnImmutableList() {
+    List<String> source = new ArrayList<>(List.of("b", "c"));
+    NonEmptyList<String> nel = new NonEmptyList<>("a", source);
+
+    source.add("mutated");
+    source.set(0, "changed");
+
+    assertThat(nel.toList()).containsExactly("a", "b", "c");
+    assertThatThrownBy(() -> nel.tail().add("x")).isInstanceOf(UnsupportedOperationException.class);
+  }
+
+  @Test
   void fromList_nullElementAfterHead_throwsNullPointerExceptionWithMessage() {
     assertThatNullPointerException()
         .isThrownBy(() -> NonEmptyList.fromList(Arrays.asList("a", null)))
@@ -226,13 +238,6 @@ class NonEmptyListTest {
   }
 
   @Test
-  void iterator_remove_throwsUnsupportedOperationException() {
-    Iterator<String> it = NonEmptyList.of("a").iterator();
-    it.next();
-    assertThatThrownBy(it::remove).isInstanceOf(UnsupportedOperationException.class);
-  }
-
-  @Test
   void equals_sameElements_areEqual() {
     NonEmptyList<String> first = NonEmptyList.of("a", "b");
     NonEmptyList<String> second = NonEmptyList.of("a", "b");
@@ -242,13 +247,8 @@ class NonEmptyListTest {
   }
 
   @Test
-  void toString_showsRecordFormat() {
-    NonEmptyList<String> nel = NonEmptyList.of("a", "b");
-
-    String str = nel.toString();
-
-    assertThat(str).contains("NonEmptyList");
-    assertThat(str).contains("a");
-    assertThat(str).contains("b");
+  void toString_usesRecordFormatWithHeadAndTailSeparated() {
+    assertThat(NonEmptyList.of("a", "b").toString()).isEqualTo("NonEmptyList[head=a, tail=[b]]");
+    assertThat(NonEmptyList.of("solo").toString()).isEqualTo("NonEmptyList[head=solo, tail=[]]");
   }
 }

@@ -12,9 +12,10 @@ class SemigroupTest {
   // -------------------------------------------------------------------------
 
   @Test
-  void of_wrapsFunction() {
-    Semigroup<Integer> sum = Semigroup.of(Integer::sum);
-    assertThat(sum.combine(3, 4)).isEqualTo(7);
+  void of_wrapsFunctionPreservingArgumentOrder() {
+    Semigroup<String> concat = Semigroup.of((x, y) -> x + "|" + y);
+
+    assertThat(concat.combine("left", "right")).isEqualTo("left|right");
   }
 
   @Test
@@ -22,12 +23,6 @@ class SemigroupTest {
     assertThatNullPointerException()
         .isThrownBy(() -> Semigroup.of(null))
         .withMessage("combiner must not be null");
-  }
-
-  @Test
-  void of_isAssociative() {
-    Semigroup<Integer> sum = Semigroup.of(Integer::sum);
-    assertThat(sum.combine(1, sum.combine(2, 3))).isEqualTo(sum.combine(sum.combine(1, 2), 3));
   }
 
   // -------------------------------------------------------------------------

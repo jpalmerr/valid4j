@@ -14,21 +14,8 @@ import net.jqwik.api.constraints.StringLength;
 class PropertyTest {
 
   // -------------------------------------------------------------------------
-  // Semigroup laws
+  // NonEmptyList.appendAll — associativity
   // -------------------------------------------------------------------------
-
-  @Property
-  void stringSemigroup_associativity(
-      @ForAll @StringLength(max = 10) String x,
-      @ForAll @StringLength(max = 10) String y,
-      @ForAll @StringLength(max = 10) String z) {
-    Semigroup<String> semigroup = (a, b) -> a + b;
-
-    String leftAssoc = semigroup.combine(semigroup.combine(x, y), z);
-    String rightAssoc = semigroup.combine(x, semigroup.combine(y, z));
-
-    assertThat(leftAssoc).isEqualTo(rightAssoc);
-  }
 
   @Property
   void nonEmptyListAppendAll_associativity(
