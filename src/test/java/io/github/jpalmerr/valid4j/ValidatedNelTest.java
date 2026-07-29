@@ -3,6 +3,7 @@ package io.github.jpalmerr.valid4j;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -284,6 +285,207 @@ class ValidatedNelTest {
     assertThat(result).isInstanceOf(Validated.Invalid.class);
     assertThat(((Validated.Invalid<NonEmptyList<String>, String>) result).error().toList())
         .containsExactly("e1", "e2", "e3");
+  }
+
+  @Test
+  void nelCombine4_allValid_delegatesArgumentsInPositionalOrder() {
+    var v1 = ValidatedNel.<String, String>validNel("1st");
+    var v2 = ValidatedNel.<String, String>validNel("2nd");
+    var v3 = ValidatedNel.<String, String>validNel("3rd");
+    var v4 = ValidatedNel.<String, String>validNel("4th");
+
+    var result = ValidatedNel.combine(v1, v2, v3, v4, (a, b, c, d) -> String.join("|", a, b, c, d));
+
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th"));
+  }
+
+  @Test
+  void nelCombine4_allInvalid_accumulatesIntoOneNelInOrder() {
+    var v1 = ValidatedNel.<String, String>invalidNel("e1");
+    var v2 = ValidatedNel.<String, String>invalidNel("e2");
+    var v3 = ValidatedNel.<String, String>invalidNel("e3");
+    var v4 = ValidatedNel.<String, String>invalidNel("e4");
+
+    var result = ValidatedNel.combine(v1, v2, v3, v4, (a, b, c, d) -> String.join("|", a, b, c, d));
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("e1", "e2", "e3", "e4"));
+  }
+
+  @Test
+  void nelCombine5_allValid_delegatesArgumentsInPositionalOrder() {
+    var v1 = ValidatedNel.<String, String>validNel("1st");
+    var v2 = ValidatedNel.<String, String>validNel("2nd");
+    var v3 = ValidatedNel.<String, String>validNel("3rd");
+    var v4 = ValidatedNel.<String, String>validNel("4th");
+    var v5 = ValidatedNel.<String, String>validNel("5th");
+
+    var result =
+        ValidatedNel.combine(
+            v1, v2, v3, v4, v5, (a, b, c, d, f) -> String.join("|", a, b, c, d, f));
+
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th|5th"));
+  }
+
+  @Test
+  void nelCombine5_allInvalid_accumulatesIntoOneNelInOrder() {
+    var v1 = ValidatedNel.<String, String>invalidNel("e1");
+    var v2 = ValidatedNel.<String, String>invalidNel("e2");
+    var v3 = ValidatedNel.<String, String>invalidNel("e3");
+    var v4 = ValidatedNel.<String, String>invalidNel("e4");
+    var v5 = ValidatedNel.<String, String>invalidNel("e5");
+
+    var result =
+        ValidatedNel.combine(
+            v1, v2, v3, v4, v5, (a, b, c, d, f) -> String.join("|", a, b, c, d, f));
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("e1", "e2", "e3", "e4", "e5"));
+  }
+
+  @Test
+  void nelCombine6_allValid_delegatesArgumentsInPositionalOrder() {
+    var v1 = ValidatedNel.<String, String>validNel("1st");
+    var v2 = ValidatedNel.<String, String>validNel("2nd");
+    var v3 = ValidatedNel.<String, String>validNel("3rd");
+    var v4 = ValidatedNel.<String, String>validNel("4th");
+    var v5 = ValidatedNel.<String, String>validNel("5th");
+    var v6 = ValidatedNel.<String, String>validNel("6th");
+
+    var result =
+        ValidatedNel.combine(
+            v1, v2, v3, v4, v5, v6, (a, b, c, d, f, g) -> String.join("|", a, b, c, d, f, g));
+
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th|5th|6th"));
+  }
+
+  @Test
+  void nelCombine6_allInvalid_accumulatesIntoOneNelInOrder() {
+    var v1 = ValidatedNel.<String, String>invalidNel("e1");
+    var v2 = ValidatedNel.<String, String>invalidNel("e2");
+    var v3 = ValidatedNel.<String, String>invalidNel("e3");
+    var v4 = ValidatedNel.<String, String>invalidNel("e4");
+    var v5 = ValidatedNel.<String, String>invalidNel("e5");
+    var v6 = ValidatedNel.<String, String>invalidNel("e6");
+
+    var result =
+        ValidatedNel.combine(
+            v1, v2, v3, v4, v5, v6, (a, b, c, d, f, g) -> String.join("|", a, b, c, d, f, g));
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("e1", "e2", "e3", "e4", "e5", "e6"));
+  }
+
+  @Test
+  void nelCombine7_allValid_delegatesArgumentsInPositionalOrder() {
+    var v1 = ValidatedNel.<String, String>validNel("1st");
+    var v2 = ValidatedNel.<String, String>validNel("2nd");
+    var v3 = ValidatedNel.<String, String>validNel("3rd");
+    var v4 = ValidatedNel.<String, String>validNel("4th");
+    var v5 = ValidatedNel.<String, String>validNel("5th");
+    var v6 = ValidatedNel.<String, String>validNel("6th");
+    var v7 = ValidatedNel.<String, String>validNel("7th");
+
+    var result =
+        ValidatedNel.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            v6,
+            v7,
+            (a, b, c, d, f, g, h) -> String.join("|", a, b, c, d, f, g, h));
+
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th|5th|6th|7th"));
+  }
+
+  @Test
+  void nelCombine7_allInvalid_accumulatesIntoOneNelInOrder() {
+    var v1 = ValidatedNel.<String, String>invalidNel("e1");
+    var v2 = ValidatedNel.<String, String>invalidNel("e2");
+    var v3 = ValidatedNel.<String, String>invalidNel("e3");
+    var v4 = ValidatedNel.<String, String>invalidNel("e4");
+    var v5 = ValidatedNel.<String, String>invalidNel("e5");
+    var v6 = ValidatedNel.<String, String>invalidNel("e6");
+    var v7 = ValidatedNel.<String, String>invalidNel("e7");
+
+    var result =
+        ValidatedNel.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            v6,
+            v7,
+            (a, b, c, d, f, g, h) -> String.join("|", a, b, c, d, f, g, h));
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("e1", "e2", "e3", "e4", "e5", "e6", "e7"));
+  }
+
+  @Test
+  void nelCombine8_allValid_delegatesArgumentsInPositionalOrder() {
+    var v1 = ValidatedNel.<String, String>validNel("1st");
+    var v2 = ValidatedNel.<String, String>validNel("2nd");
+    var v3 = ValidatedNel.<String, String>validNel("3rd");
+    var v4 = ValidatedNel.<String, String>validNel("4th");
+    var v5 = ValidatedNel.<String, String>validNel("5th");
+    var v6 = ValidatedNel.<String, String>validNel("6th");
+    var v7 = ValidatedNel.<String, String>validNel("7th");
+    var v8 = ValidatedNel.<String, String>validNel("8th");
+
+    var result =
+        ValidatedNel.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            v6,
+            v7,
+            v8,
+            (a, b, c, d, f, g, h, i) -> String.join("|", a, b, c, d, f, g, h, i));
+
+    assertThat(result).isEqualTo(Validated.valid("1st|2nd|3rd|4th|5th|6th|7th|8th"));
+  }
+
+  @Test
+  void nelCombine8_allInvalid_accumulatesIntoOneNelInOrder() {
+    var v1 = ValidatedNel.<String, String>invalidNel("e1");
+    var v2 = ValidatedNel.<String, String>invalidNel("e2");
+    var v3 = ValidatedNel.<String, String>invalidNel("e3");
+    var v4 = ValidatedNel.<String, String>invalidNel("e4");
+    var v5 = ValidatedNel.<String, String>invalidNel("e5");
+    var v6 = ValidatedNel.<String, String>invalidNel("e6");
+    var v7 = ValidatedNel.<String, String>invalidNel("e7");
+    var v8 = ValidatedNel.<String, String>invalidNel("e8");
+
+    var result =
+        ValidatedNel.combine(
+            v1,
+            v2,
+            v3,
+            v4,
+            v5,
+            v6,
+            v7,
+            v8,
+            (a, b, c, d, f, g, h, i) -> String.join("|", a, b, c, d, f, g, h, i));
+
+    assertThat(ValidatedNel.errors(result))
+        .get()
+        .extracting(NonEmptyList::toList)
+        .isEqualTo(List.of("e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8"));
   }
 
   // -------------------------------------------------------------------------
