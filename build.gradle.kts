@@ -113,8 +113,9 @@ publishing {
                 }
                 developers {
                     developer {
+                        id.set("jpalmerr")
                         name.set("James Palmer")
-                        email.set("46752489+jpalmerr@users.noreply.github.com")
+                        url.set("https://github.com/jpalmerr")
                     }
                 }
             }
