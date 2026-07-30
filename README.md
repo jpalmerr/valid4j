@@ -44,13 +44,13 @@ valid4j gives you a `Validated<E, A>` type where:
 <dependency>
   <groupId>io.github.jpalmerr</groupId>
   <artifactId>valid4j</artifactId>
-  <version>1.0.0</version>
+  <version>0.1.0</version>
 </dependency>
 ```
 
 ```groovy
 // build.gradle.kts
-implementation("io.github.jpalmerr:valid4j:1.0.0")
+implementation("io.github.jpalmerr:valid4j:0.1.0")
 ```
 
 Requires Java 21+ at runtime. Zero runtime dependencies.

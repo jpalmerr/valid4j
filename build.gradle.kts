@@ -1,11 +1,12 @@
 plugins {
     `java-library`
     `maven-publish`
+    signing
     id("com.diffplug.spotless") version "7.0.2"
 }
 
 group = "io.github.jpalmerr"
-version = "1.0.0"
+version = "0.1.0"
 
 java {
     toolchain {
@@ -120,5 +121,17 @@ publishing {
                 }
             }
         }
+    }
+}
+
+signing {
+    val signingKey = providers.environmentVariable("SIGNING_KEY").orNull
+
+    // Signing is opt-in rather than required: README tells users to run publishToMavenLocal, which
+    // would fail for anyone without the private key. release.yml asserts the key is present, so a
+    // real release cannot slip through unsigned.
+    if (signingKey != null) {
+        useInMemoryPgpKeys(signingKey, providers.environmentVariable("SIGNING_PASSPHRASE").orNull)
+        sign(publishing.publications["maven"])
     }
 }

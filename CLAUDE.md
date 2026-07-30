@@ -32,10 +32,11 @@ src/test/java/        -- Unit + property tests.
 
 ## Publication
 
-- Group: `io.github.jpalmerr`, Artifact: `valid4j`, Version: `1.0.0`
+- Group: `io.github.jpalmerr`, Artifact: `valid4j`, Version: `0.1.0`
 - Coordinates inherited from `build.gradle.kts` root `version` property; no duplication in publishing block.
 - JPMS module name: `io.github.jpalmerr.valid4j`
 - POM metadata (name, description, url, license, scm, developers) and artifact types (sources jar, javadoc jar) configured in publishing block.
+- Published to Maven Central via the Central Portal using the nmcp plugin (`settings.gradle.kts`). Signing is opt-in on `SIGNING_KEY`. See `RELEASING.md`.
 
 ## Key Design Decisions
 
