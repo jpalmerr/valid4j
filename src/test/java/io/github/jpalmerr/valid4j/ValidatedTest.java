@@ -233,6 +233,15 @@ class ValidatedTest {
         .withMessage("f must not be null");
   }
 
+  @Test
+  void andThen_functionReturnsNull_throwsNPE() {
+    Validated<String, Integer> valid = Validated.valid(1);
+
+    assertThatNullPointerException()
+        .isThrownBy(() -> valid.andThen(n -> null))
+        .withMessage("f must not return null");
+  }
+
   // -------------------------------------------------------------------------
   // getOrElseThrow
   // -------------------------------------------------------------------------

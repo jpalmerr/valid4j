@@ -198,13 +198,15 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
    * if this is {@link Invalid}, the function is never called. Use {@link #combine} for independent
    * validations.
    *
-   * @param f the function to apply to the value if valid (must not be null)
+   * @param f the function to apply to the value if valid (must not be null, must not return null)
    * @param <B> the result value type
    * @return the result of {@code f} if valid, or an equal {@link Invalid} if invalid
    */
   default <B> Validated<E, B> andThen(Function<? super A, ? extends Validated<E, B>> f) {
     Objects.requireNonNull(f, "f must not be null");
-    return fold(e -> invalid(e), f);
+    // Unlike map/mapError/combine, this result is already a Validated, so no null-rejecting
+    // constructor stands between f's return value and the caller.
+    return Objects.requireNonNull(fold(e -> invalid(e), f), "f must not return null");
   }
 
   /**
