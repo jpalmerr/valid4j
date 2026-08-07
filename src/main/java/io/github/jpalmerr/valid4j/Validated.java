@@ -57,6 +57,7 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
    * not participate in {@code equals}/{@code hashCode} due to type erasure. Two {@code Valid}
    * instances with different error types but the same value are considered equal.
    *
+   * @param value the valid value (must not be null)
    * @param <E> the error type (unused in this case, but required for type alignment)
    * @param <A> the value type
    */
@@ -78,6 +79,7 @@ public sealed interface Validated<E, A> permits Validated.Valid, Validated.Inval
    * not participate in {@code equals}/{@code hashCode} due to type erasure. Two {@code Invalid}
    * instances with different value types but the same error are considered equal.
    *
+   * @param error the error value (must not be null)
    * @param <E> the error type
    * @param <A> the value type (unused in this case, but required for type alignment)
    */

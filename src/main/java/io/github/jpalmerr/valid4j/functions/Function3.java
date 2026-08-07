@@ -10,5 +10,13 @@ package io.github.jpalmerr.valid4j.functions;
  */
 @FunctionalInterface
 public interface Function3<A, B, C, R> {
+  /**
+   * Applies this function to the given arguments.
+   *
+   * @param a the first argument
+   * @param b the second argument
+   * @param c the third argument
+   * @return the function result
+   */
   R apply(A a, B b, C c);
 }

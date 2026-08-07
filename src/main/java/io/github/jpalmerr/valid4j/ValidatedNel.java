@@ -154,7 +154,20 @@ public final class ValidatedNel {
     return Validated.combine(v1, v2, Semigroup.nonEmptyList(), mapper);
   }
 
-  /** Three-input variant of {@link #combine}. */
+  /**
+   * Three-input variant of {@link #combine}.
+   *
+   * @param v1 the first validated value
+   * @param v2 the second validated value
+   * @param v3 the third validated value
+   * @param mapper the function to apply when all inputs are valid (must not be null)
+   * @param <E> the error element type
+   * @param <A> the type of the first valid value
+   * @param <B> the type of the second valid value
+   * @param <C> the type of the third valid value
+   * @param <R> the result type
+   * @return a combined {@code Validated<NonEmptyList<E>, R>}
+   */
   public static <E, A, B, C, R> Validated<NonEmptyList<E>, R> combine(
       Validated<NonEmptyList<E>, A> v1,
       Validated<NonEmptyList<E>, B> v2,
@@ -163,7 +176,22 @@ public final class ValidatedNel {
     return Validated.combine(v1, v2, v3, Semigroup.nonEmptyList(), mapper);
   }
 
-  /** Four-input variant of {@link #combine}. */
+  /**
+   * Four-input variant of {@link #combine}.
+   *
+   * @param v1 the first validated value
+   * @param v2 the second validated value
+   * @param v3 the third validated value
+   * @param v4 the fourth validated value
+   * @param mapper the function to apply when all inputs are valid (must not be null)
+   * @param <E> the error element type
+   * @param <A> the type of the first valid value
+   * @param <B> the type of the second valid value
+   * @param <C> the type of the third valid value
+   * @param <D> the type of the fourth valid value
+   * @param <R> the result type
+   * @return a combined {@code Validated<NonEmptyList<E>, R>}
+   */
   public static <E, A, B, C, D, R> Validated<NonEmptyList<E>, R> combine(
       Validated<NonEmptyList<E>, A> v1,
       Validated<NonEmptyList<E>, B> v2,
@@ -173,7 +201,24 @@ public final class ValidatedNel {
     return Validated.combine(v1, v2, v3, v4, Semigroup.nonEmptyList(), mapper);
   }
 
-  /** Five-input variant of {@link #combine}. */
+  /**
+   * Five-input variant of {@link #combine}.
+   *
+   * @param v1 the first validated value
+   * @param v2 the second validated value
+   * @param v3 the third validated value
+   * @param v4 the fourth validated value
+   * @param v5 the fifth validated value
+   * @param mapper the function to apply when all inputs are valid (must not be null)
+   * @param <E> the error element type
+   * @param <A> the type of the first valid value
+   * @param <B> the type of the second valid value
+   * @param <C> the type of the third valid value
+   * @param <D> the type of the fourth valid value
+   * @param <F> the type of the fifth valid value
+   * @param <R> the result type
+   * @return a combined {@code Validated<NonEmptyList<E>, R>}
+   */
   public static <E, A, B, C, D, F, R> Validated<NonEmptyList<E>, R> combine(
       Validated<NonEmptyList<E>, A> v1,
       Validated<NonEmptyList<E>, B> v2,
@@ -184,7 +229,26 @@ public final class ValidatedNel {
     return Validated.combine(v1, v2, v3, v4, v5, Semigroup.nonEmptyList(), mapper);
   }
 
-  /** Six-input variant of {@link #combine}. */
+  /**
+   * Six-input variant of {@link #combine}.
+   *
+   * @param v1 the first validated value
+   * @param v2 the second validated value
+   * @param v3 the third validated value
+   * @param v4 the fourth validated value
+   * @param v5 the fifth validated value
+   * @param v6 the sixth validated value
+   * @param mapper the function to apply when all inputs are valid (must not be null)
+   * @param <E> the error element type
+   * @param <A> the type of the first valid value
+   * @param <B> the type of the second valid value
+   * @param <C> the type of the third valid value
+   * @param <D> the type of the fourth valid value
+   * @param <F> the type of the fifth valid value
+   * @param <G> the type of the sixth valid value
+   * @param <R> the result type
+   * @return a combined {@code Validated<NonEmptyList<E>, R>}
+   */
   public static <E, A, B, C, D, F, G, R> Validated<NonEmptyList<E>, R> combine(
       Validated<NonEmptyList<E>, A> v1,
       Validated<NonEmptyList<E>, B> v2,
@@ -197,7 +261,28 @@ public final class ValidatedNel {
     return Validated.combine(v1, v2, v3, v4, v5, v6, Semigroup.nonEmptyList(), mapper);
   }
 
-  /** Seven-input variant of {@link #combine}. */
+  /**
+   * Seven-input variant of {@link #combine}.
+   *
+   * @param v1 the first validated value
+   * @param v2 the second validated value
+   * @param v3 the third validated value
+   * @param v4 the fourth validated value
+   * @param v5 the fifth validated value
+   * @param v6 the sixth validated value
+   * @param v7 the seventh validated value
+   * @param mapper the function to apply when all inputs are valid (must not be null)
+   * @param <E> the error element type
+   * @param <A> the type of the first valid value
+   * @param <B> the type of the second valid value
+   * @param <C> the type of the third valid value
+   * @param <D> the type of the fourth valid value
+   * @param <F> the type of the fifth valid value
+   * @param <G> the type of the sixth valid value
+   * @param <H> the type of the seventh valid value
+   * @param <R> the result type
+   * @return a combined {@code Validated<NonEmptyList<E>, R>}
+   */
   public static <E, A, B, C, D, F, G, H, R> Validated<NonEmptyList<E>, R> combine(
       Validated<NonEmptyList<E>, A> v1,
       Validated<NonEmptyList<E>, B> v2,
@@ -219,7 +304,30 @@ public final class ValidatedNel {
     return Validated.combine(v1, v2, v3, v4, v5, v6, v7, Semigroup.nonEmptyList(), mapper);
   }
 
-  /** Eight-input variant of {@link #combine}. */
+  /**
+   * Eight-input variant of {@link #combine}.
+   *
+   * @param v1 the first validated value
+   * @param v2 the second validated value
+   * @param v3 the third validated value
+   * @param v4 the fourth validated value
+   * @param v5 the fifth validated value
+   * @param v6 the sixth validated value
+   * @param v7 the seventh validated value
+   * @param v8 the eighth validated value
+   * @param mapper the function to apply when all inputs are valid (must not be null)
+   * @param <E> the error element type
+   * @param <A> the type of the first valid value
+   * @param <B> the type of the second valid value
+   * @param <C> the type of the third valid value
+   * @param <D> the type of the fourth valid value
+   * @param <F> the type of the fifth valid value
+   * @param <G> the type of the sixth valid value
+   * @param <H> the type of the seventh valid value
+   * @param <I> the type of the eighth valid value
+   * @param <R> the result type
+   * @return a combined {@code Validated<NonEmptyList<E>, R>}
+   */
   public static <E, A, B, C, D, F, G, H, I, R> Validated<NonEmptyList<E>, R> combine(
       Validated<NonEmptyList<E>, A> v1,
       Validated<NonEmptyList<E>, B> v2,

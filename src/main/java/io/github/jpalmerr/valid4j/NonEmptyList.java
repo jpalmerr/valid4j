@@ -15,6 +15,8 @@ import java.util.function.Function;
  * <p>Guaranteed never empty by construction. Useful as an error accumulation type: if you have a
  * {@code NonEmptyList<E>}, you know at least one error occurred.
  *
+ * @param head the first element (must not be null)
+ * @param tail the remaining elements (must not be null, and must not contain nulls)
  * @param <A> element type
  */
 public record NonEmptyList<A>(A head, List<A> tail) implements Iterable<A> {
