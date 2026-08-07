@@ -1,9 +1,6 @@
 # Changelog
 
-## Unreleased
-
-Not yet published. `io.github.jpalmerr:valid4j` is not available on Maven Central; build from
-source or install to your local Maven repository.
+## 0.1.0 — 2026-08-07
 
 ### Features
 
